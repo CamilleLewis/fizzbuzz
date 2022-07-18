@@ -34,9 +34,7 @@ fn main() {
     println!("Fizzbuzz to {0} with fizz = {1} and buzz = {2}", number, fizz, buzz);
 
     let fizzbuzz = fizzbuzz_to(number, fizz, buzz);
-    for fb in fizzbuzz.iter() {
-        println!("{}", fb);
-    }
+    fizzbuzz.iter().for_each(|fb| println!("{}", fb));
 }
 
 fn convert_string_to_uint_or_default(string: Option<&str>, default_value: u32) -> u32 {
@@ -73,13 +71,7 @@ fn fizzbuzz(number: u32, fizz: u32, buzz: u32) -> String {
 
 
 fn fizzbuzz_to(number: u32, fizz: u32, buzz: u32) -> Vec<String> {
-    let mut output = Vec::with_capacity(number.try_into().unwrap());
-
-    for n in 1..=number {
-        output.push(fizzbuzz(n, fizz, buzz));
-    }
-
-    return output;
+    return (1..=number).map(|n| fizzbuzz(n, fizz, buzz)).collect();
 }
 
 #[cfg(test)]
@@ -107,10 +99,12 @@ mod tests {
         assert_eq!(fizzbuzz_to(6, 2, 3), expected);
     }
 
-    // #[test]
-    // fn test_convert_string_to_uint_or_default() {
-    //     assert_eq!(convert_string_to_uint_or_default("1".to_string(), 3), 1);
-    //     assert_eq!(convert_string_to_uint_or_default("abc".to_string(), 5), 5);
-    //     assert_eq!(convert_string_to_uint_or_default("()".to_string(), 1), 1);
-    // }
+    #[test]
+    fn test_convert_string_to_uint_or_default() {
+        let one = Some("1");
+        let abc = Some("abc");
+        assert_eq!(convert_string_to_uint_or_default(one, 3), 1);
+        assert_eq!(convert_string_to_uint_or_default(abc, 5), 5);
+        assert_eq!(convert_string_to_uint_or_default(None, 1), 1);
+    }
 }
